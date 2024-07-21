@@ -1,0 +1,5 @@
+Flask
+Gunicorn
+SQLAlchemy
+flask_sqlalchemy
+emit

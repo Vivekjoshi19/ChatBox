@@ -1,0 +1,7 @@
+Flask
+Gunicorn
+SQLAlchemy
+flask_sqlalchemy
+emit
+flask_socketio
+SocketIO

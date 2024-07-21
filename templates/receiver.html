@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Private Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Full viewport height */
+            background-color: #f0f0f0; /* Optional: Set a background color */
+        }
+
+        .chat-box {
+            width: 100%;
+            max-width: 600px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            overflow-y: auto;
+            height: 400px; /* Increased height for better scrolling */
+            background-color: #f5f5f5; /* Light grey background */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message-container {
+            flex: 1; /* Take remaining space for messages */
+            display: flex;
+            flex-direction: column;
+            gap: 10px; /* Spacing between messages */
+            overflow-y: auto; /* Enable scrolling for messages */
+            text-align: center; /* Center-align messages */
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 12px; /* Rounded corners */
+            clear: both;
+            word-wrap: break-word; /* Wrap long words */
+        }
+
+        .message.self {
+            align-self: flex-start;
+            background-color: #ffffff; /* White for receiver's messages */
+
+        }
+
+        .message.received {
+            align-self: flex-end;
+            background-color: #dcf8c6; /* Light green for sender's messages
+        }
+
+        .input-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            background-color: #f5f5f5; /* Match chat box background */
+            border-top: 1px solid #ccc; /* Separator line */
+        }
+
+
+        .input-text {
+            padding: 10px;
+            font-size: 16px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 20px; /* Rounded input box */
+            outline: none;
+        }
+
+        .input-submit {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 20px; /* Rounded submit button */
+        }
+
+        .input-submit:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-box" id="chat-box">
+        <div class="message-container" id="message-container">
+            <!-- Messages will be displayed here -->
+        </div>
+        <form id="message-form" action="" method="post" class="input-container">
+            <input type="text" id="message" name="message" class="input-text" placeholder="Type your message...">
+            <input type="submit" value="Send" class="input-submit">
+        </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
+    <script>
+        var socket = io.connect('http://' + document.domain + ':' + location.port + '/chat');
+
+        document.getElementById("message-form").onsubmit = function(e) {
+            e.preventDefault();
+            let messageInput = document.getElementById("message");
+            let message = messageInput.value.trim();
+            if (message !== "") {
+                socket.emit('message_from_client', {'message': message, 'role': 'receiver'});
+                messageInput.value = "";
+            }
+        };
+
+        socket.on('message_from_server', function(data) {
+            displayMessage(data.message, data.role === 'receiver');
+        });
+
+        function displayMessage(message, self) {
+            let messageContainer = document.getElementById("message-container");
+            let messageDiv = document.createElement("div");
+            messageDiv.className = "message";
+
+            if (self) {
+                messageDiv.classList.add("self");
+                messageDiv.innerHTML = "<strong>Received:</strong> " + message;
+            } else {
+                messageDiv.classList.add("received");
+                messageDiv.innerHTML = "<strong>You:</strong> " + message;
+            }
+
+            messageContainer.appendChild(messageDiv);
+            messageContainer.scrollTop = messageContainer.scrollHeight;
+        }
+    </script>
+</body>
+</html>
+

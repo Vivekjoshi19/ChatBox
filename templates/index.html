@@ -1,0 +1,105 @@
+
+
+<!doctype html>
+<html lang="en">
+<head>
+    <style>
+        /* styles.css */
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        form {
+            display: grid;
+            justify-content: center;
+            position: relative;
+            top: 100px;
+        }
+
+        label {
+            margin-bottom: 8px;
+            display: inline-block;
+            width: 100px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            padding: 8px;
+            margin-bottom: 12px;
+            width: 200px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"], input[type="submit1"] {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        input[type="submit"]:hover, input[type="submit1"]:hover {
+            background-color: #45a049;
+        }
+
+        a {
+            display: inline-block;
+            border: 2px solid black;
+            padding: 8px 16px;
+            text-decoration: none;
+            color: black;
+            margin-top: 16px;
+        }
+
+        a:hover {
+            background-color: #ddd;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Private Chat</title>
+</head>
+<body>
+<form action="{{url_for('index')}}" method="POST">
+    <div>
+
+
+        <label for="name">Username:</label> <input type="text" id="name" name="name" required><br>
+        <label for="email">Email:</label> <input type="email" id="email" name="email" required><br>
+        <label for="password">Password:</label> <input type="password" id="password" name="password" required>
+
+        <!-- Password visibility checkbox -->
+<input type="checkbox" id="show"><br>
+
+        <label for="mobile">Mobile no:</label> <input type="text" id="mobile" name="mobile" required><br>
+
+        <input type="submit" id="submit" value="submit"><br>
+
+        <a style="border:2px solid black;text-decoration:none;" href="{{url_for('login')}}" id="submit1">login</a>
+
+    </div>
+</form>
+
+<script>
+    const show = document.getElementById('show');
+    const password = document.getElementById('password');
+
+    show.addEventListener('change', function() {
+        if (this.checked) {
+            password.type = 'text';
+        } else {
+            password.type = 'password';
+        }
+    });
+</script>
+
+</body>
+</html>
